@@ -1,0 +1,39 @@
+{
+  "name": "react-native-usedesk",
+  "title": "React Native UseDesk",
+  "version": "0.0.1",
+  "description": "React Native UseDesk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ARDcode/react-native-usedesk.git",
+    "baseUrl": "https://github.com/ARDcode/react-native-usedesk"
+  },
+  "keywords": [
+    "react-native",
+    "android",
+    "ios",
+    "usedesk"
+  ],
+  "author": {
+    "name": "ARDCode",
+    "email": "codeard@gmail.com"
+  },
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": "^16.5.0",
+    "react-native": ">=0.57.0-rc.0 <1.0.x"
+  },
+  "devDependencies": {
+    "react": "^16.5.0",
+    "react-native": "^0.60.3"
+  },
+  "dependencies": {
+  },
+  "isSwift": true
+}
