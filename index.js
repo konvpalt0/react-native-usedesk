@@ -16,6 +16,10 @@ export class UseDesk {
         UseDeskChat.sendFile(message, fileName, fileType, base64);
     }
 
+    static sendFileAndroid = (uri = "", fileType = "") => {
+        UseDeskChat.sendFile(uri, fileType);
+    }
+
     static addEventListener = (event, listener) => {
         return MessageEvents.addListener(event, listener);
     }
