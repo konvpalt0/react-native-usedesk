@@ -18,6 +18,9 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import ru.usedesk.chat_sdk.external.IUsedeskChat;
@@ -48,6 +51,7 @@ public class RNUsedeskModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void initChat(String companyID, String url, String port, String api_token, String email, String phone, String name, String nameChat) {
+      UsedeskChatSdk.release();
     UsedeskChatConfiguration usedeskChatConfiguration = new UsedeskChatConfiguration(companyID, email, "https://"+url+":"+port, url, name, Long.valueOf(phone), null);
     UsedeskChatSdk.setConfiguration(usedeskChatConfiguration);
     UsedeskChatSdk.init(reactContext, new IUsedeskActionListener() {
@@ -58,19 +62,7 @@ public class RNUsedeskModule extends ReactContextBaseJavaModule {
 
       @Override
       public void onMessageReceived(@NonNull UsedeskMessage usedeskMessage) {
-        Log.d("onMessageReceived", "onMessageReceived ");
-        WritableMap map = Arguments.createMap();
-        map.putString("text", usedeskMessage.getText() );
-        map.putBoolean("me", usedeskMessage.getType().equals(UsedeskMessageType.CLIENT_TO_OPERATOR));
-        map.putString("avatar", usedeskMessage.getUsedeskPayload().getAvatar());
-        if (usedeskMessage.getFile() != null) {
-          UsedeskFile file = usedeskMessage.getFile();
-          WritableMap fileMap = Arguments.createMap();
-          fileMap.putString("name", file.getName());
-          fileMap.putString("url", file.getContent());
-          map.putMap("file", fileMap);
-        }
-        sendEvent(reactContext, "onMessage", map);
+        sendEvent(reactContext, "onMessage", getModelFromMessage(usedeskMessage));
       }
 
       @Override
@@ -78,22 +70,8 @@ public class RNUsedeskModule extends ReactContextBaseJavaModule {
         Log.d("onMessagesReceived", list.size() + "");
         WritableArray array = new WritableNativeArray();
         for (int i = 0; i < list.size(); i++) {
-          WritableMap map = Arguments.createMap();
-          UsedeskMessage message = list.get(i);
-          map.putString("text", message.getText() );
-          map.putBoolean("me", message.getType().equals(UsedeskMessageType.CLIENT_TO_OPERATOR));
-          map.putString("avatar", message.getUsedeskPayload().getAvatar());
-          if (message.getFile() != null) {
-            UsedeskFile file = message.getFile();
-            WritableMap fileMap = Arguments.createMap();
-            fileMap.putString("name", file.getName());
-            fileMap.putString("url", file.getContent());
-            map.putMap("file", fileMap);
-          }
-          array.pushMap(map);
+          array.pushMap(getModelFromMessage(list.get(i)));
         }
-
-
         sendEvent(reactContext, "onConnected", array);
       }
 
@@ -160,4 +138,42 @@ public class RNUsedeskModule extends ReactContextBaseJavaModule {
             .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
             .emit(eventName, params);
   }
+
+  private WritableMap getModelFromMessage(UsedeskMessage message) {
+      WritableMap map = Arguments.createMap();
+      map.putString("text", message.getText() );
+      map.putBoolean("me", message.getType().equals(UsedeskMessageType.CLIENT_TO_OPERATOR));
+      map.putString("name", message.getName() );
+      Log.d("testDate", message.getCreatedAt());
+      map.putString("date", formatDateFromString("yyyy-MM-dd'T'HH:mm:ss'Z'", "HH:mm E, d MMM", message.getCreatedAt()));
+      map.putString("avatar", message.getUsedeskPayload().getAvatar());
+      if (message.getFile() != null) {
+          UsedeskFile file = message.getFile();
+          WritableMap fileMap = Arguments.createMap();
+          fileMap.putString("name", file.getName());
+          fileMap.putString("url", file.getContent());
+          map.putMap("file", fileMap);
+      }
+      return map;
+  }
+
+    private static String formatDateFromString(String inputFormat, String outputFormat, String inputDate){
+
+        Date parsed = null;
+        String outputDate = "";
+
+        SimpleDateFormat df_input = new SimpleDateFormat(inputFormat, java.util.Locale.getDefault());
+        SimpleDateFormat df_output = new SimpleDateFormat(outputFormat, java.util.Locale.getDefault());
+
+        try {
+            parsed = df_input.parse(inputDate);
+            outputDate = df_output.format(parsed);
+
+        } catch (ParseException e) {
+            Log.d("Date parse error", e.toString());
+        }
+
+        return outputDate;
+
+    }
 }

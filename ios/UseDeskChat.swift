@@ -20,6 +20,10 @@ class UseDeskChat: RCTEventEmitter {
                 self.sendEvent(withName: "onMessage", body: self.getMessageDict(message!))
             }
         }
+        
+//        self.usedesk.feedbackMessageBlock = { message in
+//            print("Оцените плез")
+//        }
     }
     
     @objc func sendMessage(_ message: String) -> Void {
@@ -35,6 +39,13 @@ class UseDeskChat: RCTEventEmitter {
         messageDic["text"] = message.text
         messageDic["me"] = !message.incoming
         messageDic["avatar"] = message.avatar
+        messageDic["name"] = message.name;
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ru")
+        formatter.timeZone = TimeZone(identifier: "Europe/Moscow")
+        formatter.dateFormat = "HH:mm E, d MMM"
+        let date = formatter.string(from: message.date!)
+        messageDic["date"] = date
         if ((message.file) != nil) {
             messageDic["file"] = [
                 "name": message.file?.name,
