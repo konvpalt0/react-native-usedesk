@@ -18,9 +18,8 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency 'React-Core'
-  s.dependency 'UseDesk_SDK_Swift', :git => 'https://github.com/ARDcode/UseDeskSwift.git', :modular_headers => true'
+  s.dependency 'UseDesk_SDK_Swift', :git => 'https://github.com/usedesk/UseDeskSwift.git', :modular_headers => true'
 
 
 end
 
-  

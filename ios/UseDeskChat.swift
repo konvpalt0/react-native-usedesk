@@ -4,8 +4,8 @@ import UseDesk_SDK_Swift
 @objc(UseDeskChat)
 class UseDeskChat: RCTEventEmitter {
     let usedesk = UseDeskSDK()
-    @objc func initChat(_ companyID: String, url: String, port: String, api_token: String, email: String, phone: String, name: String, nameChat: String) -> Void {
-        self.usedesk.startWithoutGUICompanyID(companyID: companyID, isUseBase: false, api_token: api_token, email: email, phone: phone, url: url, port: port, name: name, nameChat: nameChat, connectionStatus: { (success, error) in
+    @objc func initChat(_ companyID: String, url: String, port: String, api_token: String, email: String, phone: String, name: String, nameChat: String, signature: String) -> Void {
+        self.usedesk.startWithoutGUICompanyID(companyID: companyID, isUseBase: false, api_token: api_token, email: email, phone: phone, url: url, port: port, name: name, signature:signature, nameChat: nameChat, connectionStatus: { (success, error) in
             if (success) {
                 let historyMess: NSMutableArray = []
                 
