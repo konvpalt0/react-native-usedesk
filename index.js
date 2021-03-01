@@ -4,8 +4,8 @@ const { UseDeskChat } = NativeModules;
 const MessageEvents = new NativeEventEmitter(UseDeskChat);
 
 export class UseDesk {
-    static initChat = ({companyID, url, port, api_token, email, phone, name, nameChat}) => {
-        UseDeskChat.initChat(companyID, url, port, api_token, email, phone, name, nameChat);
+    static initChat = ({companyID, url, port, api_token, email, phone, name, nameChat, signature}) => {
+        UseDeskChat.initChat(companyID, url, port, api_token, email, phone, name, nameChat, signature);
     }
 
     static sendMessage = (text) => {
@@ -16,8 +16,10 @@ export class UseDesk {
         UseDeskChat.sendFile(message, fileName, fileType, base64);
     }
 
-    static sendFileAndroid = (uri = "", fileType = "") => {
-        UseDeskChat.sendFile(uri, fileType);
+    static sendFileAndroid = (uri = "", fileType = "", name = "") => {
+        console.log('uri', uri);
+        console.log('fileType', fileType);
+        UseDeskChat.sendFile(uri, fileType, name);
     }
 
     static addEventListener = (event, listener) => {
