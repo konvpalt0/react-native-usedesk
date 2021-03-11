@@ -5,10 +5,10 @@ import UseDesk_SDK_Swift
 class UseDeskChat: RCTEventEmitter {
     let usedesk = UseDeskSDK()
     @objc func initChat(_ companyID: String, url: String, port: String, api_token: String, email: String, phone: String, name: String, nameChat: String, signature: String) -> Void {
-        self.usedesk.startWithoutGUICompanyID(companyID: companyID, isUseBase: false, api_token: api_token, email: email, phone: phone, url: url, port: port, name: name, signature:signature, nameChat: nameChat, connectionStatus: { (success, error) in
+        self.usedesk.startWithoutGUICompanyID(companyID: companyID, api_token: api_token, email: email, phone: phone, url: url, urlToSendFile: "https://mango.usedesk.ru/uapi/v1/send_file", port: port, name: name, nameChat: nameChat, signature:signature, connectionStatus: { (success, error) in
             if (success) {
                 let historyMess: NSMutableArray = []
-                
+
                 for message in self.usedesk.historyMess {
                     historyMess.add(self.getMessageDict(message))
                 }
@@ -16,14 +16,11 @@ class UseDeskChat: RCTEventEmitter {
             }
         })
         self.usedesk.newMessageBlock = { success, message in
+            print("newMessageBlock")
             if ((message) != nil) {
                 self.sendEvent(withName: "onMessage", body: self.getMessageDict(message!))
             }
         }
-        
-//        self.usedesk.feedbackMessageBlock = { message in
-//            print("Оцените плез")
-//        }
     }
     
     @objc func sendMessage(_ message: String) -> Void {
@@ -31,10 +28,18 @@ class UseDeskChat: RCTEventEmitter {
     }
     
     @objc func sendFile(_ message: String, fileName: String, fileType: String, contentBase64: String) -> Void {
-        self.usedesk.sendMessage(message, withFileName: fileName, fileType: fileType, contentBase64: contentBase64)
+
+        guard let fileData = try? Data(base64Encoded: contentBase64, options: .ignoreUnknownCharacters) else {
+            return
+        }
+        self.usedesk.sendFile(fileName: fileName, data: fileData) { (success, error) in
+            if (error != "") {
+                print(error)
+            }
+        }
     }
     
-    func getMessageDict(_ message: RCMessage) -> NSMutableDictionary {
+    func getMessageDict(_ message: UDMessage) -> NSMutableDictionary {
         let messageDic: NSMutableDictionary = [:]
         messageDic["text"] = message.text
         messageDic["me"] = !message.incoming
@@ -46,10 +51,10 @@ class UseDeskChat: RCTEventEmitter {
         formatter.dateFormat = "HH:mm E, d MMM"
         let date = formatter.string(from: message.date!)
         messageDic["date"] = date
-        if ((message.file) != nil) {
+        if ((message.file.name) != "") {
             messageDic["file"] = [
-                "name": message.file?.name,
-                "url": message.file?.content,
+                "name": message.file.name,
+                "url": message.file.content,
             ]
         }
         return messageDic;
