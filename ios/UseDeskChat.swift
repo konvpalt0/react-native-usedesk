@@ -4,8 +4,8 @@ import UseDesk_SDK_Swift
 @objc(UseDeskChat)
 class UseDeskChat: RCTEventEmitter {
     let usedesk = UseDeskSDK()
-    @objc func initChat(_ companyID: String, url: String, port: String, api_token: String, email: String, phone: String, name: String, nameChat: String, signature: String) -> Void {
-        self.usedesk.startWithoutGUICompanyID(companyID: companyID, api_token: api_token, email: email, phone: phone, url: url, urlToSendFile: "https://mango.usedesk.ru/uapi/v1/send_file", port: port, name: name, nameChat: nameChat, signature:signature, connectionStatus: { (success, error) in
+    @objc func initChat(_ companyID: String, url: String, urlToSendFile: String, port: String, api_token: String, email: String, phone: String, name: String, nameChat: String, signature: String) -> Void {
+        self.usedesk.startWithoutGUICompanyID(companyID: companyID, api_token: api_token, email: email, phone: phone, url: url, urlToSendFile: urlToSendFile + "send_file", port: port, name: name, nameChat: nameChat, signature:signature, connectionStatus: { (success, error) in
             if (success) {
                 let historyMess: NSMutableArray = []
 
@@ -22,11 +22,11 @@ class UseDeskChat: RCTEventEmitter {
             }
         }
     }
-    
+
     @objc func sendMessage(_ message: String) -> Void {
         self.usedesk.sendMessage(message)
     }
-    
+
     @objc func sendFile(_ message: String, fileName: String, fileType: String, contentBase64: String) -> Void {
 
         guard let fileData = try? Data(base64Encoded: contentBase64, options: .ignoreUnknownCharacters) else {
@@ -38,7 +38,7 @@ class UseDeskChat: RCTEventEmitter {
             }
         }
     }
-    
+
     func getMessageDict(_ message: UDMessage) -> NSMutableDictionary {
         let messageDic: NSMutableDictionary = [:]
         messageDic["text"] = message.text
@@ -59,11 +59,11 @@ class UseDeskChat: RCTEventEmitter {
         }
         return messageDic;
     }
-    
+
     override public static func requiresMainQueueSetup() -> Bool {
         return true;
     }
-    
+
     override func supportedEvents() -> [String]! {
         return ["onMessage", "onConnected"]
     }
