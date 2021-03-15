@@ -89,7 +89,7 @@ public class RNUsedeskModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onException(@NotNull Exception e) {
-                Log.d("ChatException", e.getMessage());
+                Log.d("ChatException", "ChatException");
             }
 
             @Override
