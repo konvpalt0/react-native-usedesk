@@ -38,6 +38,7 @@ import ru.usedesk.chat_sdk.entity.UsedeskMessageAgentText;
 import ru.usedesk.chat_sdk.entity.UsedeskMessageClientFile;
 import ru.usedesk.chat_sdk.entity.UsedeskMessageClientImage;
 import ru.usedesk.chat_sdk.entity.UsedeskMessageClientText;
+import ru.usedesk.chat_sdk.entity.UsedeskOfflineFormSettings;
 import ru.usedesk.common_sdk.entity.exceptions.UsedeskException;
 import ru.usedesk.common_sdk.entity.exceptions.UsedeskSocketException;
 
@@ -84,6 +85,10 @@ public class RNUsedeskModule extends ReactContextBaseJavaModule {
         usedeskChat = UsedeskChatSdk.init(reactContext);
         usedeskChat.addActionListener(new IUsedeskActionListener() {
             @Override
+            public void onOfflineFormExpected(@NotNull UsedeskOfflineFormSettings usedeskOfflineFormSettings) {
+            }
+
+            @Override
             public void onMessageReceived(@NotNull UsedeskMessage usedeskMessage) {
             }
 
@@ -121,11 +126,6 @@ public class RNUsedeskModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onFeedbackReceived() {
-
-            }
-
-            @Override
-            public void onOfflineFormExpected(@NonNull UsedeskChatConfiguration usedeskChatConfiguration) {
 
             }
         });
