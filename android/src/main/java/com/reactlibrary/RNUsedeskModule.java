@@ -77,9 +77,9 @@ public class RNUsedeskModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void initChat(String companyID, String url, String urlToSendFile, String port, String api_token, String email, String phone, String name, String nameChat, String signature) {
+    public void initChat(String companyID, String url, String urlToSendFile, String port, String api_token, String email, String phone, String name, String nameChat, String signature, String channelId) {
         UsedeskChatSdk.release();
-        UsedeskChatConfiguration usedeskChatConfiguration = new UsedeskChatConfiguration("https://" + url + ":" + port, url, urlToSendFile, companyID, signature, email, name, "", Long.valueOf(phone));
+        UsedeskChatConfiguration usedeskChatConfiguration = new UsedeskChatConfiguration("https://" + url + ":" + port, url, urlToSendFile, companyID, channelId, signature, email, name, "", Long.valueOf(phone));
         UsedeskChatSdk.setConfiguration(usedeskChatConfiguration);
         usedeskChat = UsedeskChatSdk.init(reactContext);
         usedeskChat.addActionListener(new IUsedeskActionListener() {

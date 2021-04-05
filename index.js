@@ -4,8 +4,8 @@ const { UseDeskChat } = NativeModules;
 const MessageEvents = new NativeEventEmitter(UseDeskChat);
 
 export class UseDesk {
-    static initChat = ({companyID, url, urlToSendFile, port, api_token, email, phone, name, nameChat, signature}) => {
-        UseDeskChat.initChat(companyID, url, urlToSendFile, port, api_token, email, phone, name, nameChat, signature);
+    static initChat = ({companyID, url, urlToSendFile, port, api_token, email, phone, name, nameChat, signature, channelId}) => {
+        UseDeskChat.initChat(companyID, url, urlToSendFile, port, api_token, email, phone, name, nameChat, signature, channelId);
     }
 
     static sendMessage = (text) => {

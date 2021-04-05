@@ -1,5 +1,5 @@
 export interface UseDeskConfig {
-    companyID: string, url: string, urlToSendFile: string, port: string, api_token: string, email: string, phone: string, name: string, nameChat: string, signature: string
+    companyID: string, url: string, urlToSendFile: string, port: string, api_token: string, email: string, phone: string, name: string, nameChat: string, signature: string, channelId: string;
 }
 
 declare module 'react-native-usedesk' {
