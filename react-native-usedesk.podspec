@@ -21,6 +21,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency 'React'
-  s.dependency 'UseDesk_SDK_Swift', '~> 1.2.4'
+  s.dependency 'UseDesk_SDK_Swift', '~> 1.2.3'
 
 end
